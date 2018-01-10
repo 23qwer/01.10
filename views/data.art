@@ -1,0 +1,12 @@
+<table> 
+    <tr>
+        <th>用户名</th>
+        <th>密码</th>
+    </tr>
+    {{each data item}}
+        <tr>
+            <td>{{item.username}}</td>
+            <td>{{item.password}}</td>
+        </tr>
+    {{/each}}
+</table>

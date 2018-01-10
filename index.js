@@ -1,18 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-
+const expressArt = require('express-art-template');
 const app = express();
 
 app.use(express.static('www'));
 
 app.use(bodyParser.urlencoded({extended:true}));
-
+app.engine('art',expressArt);
 app.post('/reg',(req,res)=>{
     const username = req.body.username;
-    console.log(username);
     const password = req.body.password;
-    console.log(password);
     fs.readFile('data.json',(err,data)=>{
         if(err){
             res.json({success:0,message:'系统错误，稍后再试'})
@@ -31,6 +29,30 @@ app.post('/reg',(req,res)=>{
     })
 })
 
+app.get('/test',(req,res)=>{
+    const username = req.query.username
+    fs.readFile('data.json',(err,data)=>{
+        if(err){
+            res.json({success:0,message:'系统错误，稍后再试'})
+            return;
+        }
+        const dataArr = JSON.parse(data);
+        for(let i = 0 ; i<dataArr.length ; i ++){
+            if(dataArr[i].username==username){
+                res.json({success:0,message:'aaaaaa'})
+                return;
+            }
+        }
+        res.json({success:1,message:'系统错误，稍后再试'})
+    })
+})
+
+app.get('/getall',(req,res)=>{
+    fs.readFile('data.json',(err,data)=>{
+        const dataArr = JSON.parse(data);
+        res.render('data.art',({data:dataArr}));
+    })
+})
 app.listen('3000',function(){
     console.log('运行于3000端口');
 })
